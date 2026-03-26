@@ -12,15 +12,18 @@ intents.message_content = True
 intents.voice_states = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+class MyBot(commands.Bot):
+    async def setup_hook(self):
+        await self.load_extension("cogs.debater")
+        await self.load_extension("cogs.voice")
+
+bot = MyBot(command_prefix="!", intents=intents)
 
 
 @bot.event
 async def on_ready():
     print(f"✅ Logged in as {bot.user} (ID: {bot.user.id})")
     print("🤖 Debate Bot is online and ready to argue!")
-    await bot.load_extension("cogs.debater")
-    await bot.load_extension("cogs.voice")
 
 
 @bot.command(name="ping")
